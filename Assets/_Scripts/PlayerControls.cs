@@ -6,8 +6,9 @@ using UnityEngine.InputSystem;
 public class PlayerControls : MonoBehaviour
 {
     [SerializeField] InputAction movement;
+    [SerializeField] float movementMultiplier = 50f;
+    [SerializeField] float movementClamp = 10f;
 
-    // Start is called before the first frame update
     void Start()
     {
         
@@ -20,13 +21,23 @@ public class PlayerControls : MonoBehaviour
         movement.Disable();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         float xThrow = movement.ReadValue<Vector2>().x;
         float yThrow = movement.ReadValue<Vector2>().y;
+        
+        float xOffset = xThrow * movementMultiplier * Time.deltaTime;
+        float newXPos = transform.localPosition.x + xOffset;
+        float clampedXPos = Mathf.Clamp(newXPos,-movementClamp,movementClamp);
 
-        Debug.Log(xThrow);
-        Debug.Log(yThrow);
+        float yOffset = yThrow * movementMultiplier * Time.deltaTime;
+        float newYPos = transform.localPosition.y + yOffset;
+
+
+        transform.localPosition = new Vector3(
+            clampedXPos,
+            newYPos,
+            transform.localPosition.z);
     }
 }

@@ -7,7 +7,9 @@ public class PlayerControls : MonoBehaviour
 {
     [SerializeField] InputAction movement;
     [SerializeField] float movementMultiplier = 50f;
-    [SerializeField] float movementClamp = 10f;
+    [SerializeField] float movementXClamp = 10f;
+    [SerializeField] float movementYClamp = 7f;
+    [SerializeField] float positionPitchFactor = 2f;
 
     void Start()
     {
@@ -29,15 +31,15 @@ public class PlayerControls : MonoBehaviour
         
         float xOffset = xThrow * movementMultiplier * Time.deltaTime;
         float newXPos = transform.localPosition.x + xOffset;
-        float clampedXPos = Mathf.Clamp(newXPos,-movementClamp,movementClamp);
+        float clampedXPos = Mathf.Clamp(newXPos,-movementXClamp,movementXClamp);
 
         float yOffset = yThrow * movementMultiplier * Time.deltaTime;
         float newYPos = transform.localPosition.y + yOffset;
-
+        float clampedYPos = Mathf.Clamp(newYPos,-movementYClamp,movementYClamp);
 
         transform.localPosition = new Vector3(
             clampedXPos,
-            newYPos,
+            clampedYPos,
             transform.localPosition.z);
     }
 }
